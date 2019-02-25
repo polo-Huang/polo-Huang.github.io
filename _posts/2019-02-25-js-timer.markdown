@@ -1,0 +1,126 @@
+---
+layout:     post
+title:      "js timer"
+subtitle:   ""
+date:       2019-02-25 15:00:00
+author:     "Polo"
+header-img: "img/post-bg-2015.jpg"
+catalog: true
+tags:
+  - js
+  - web
+  - test
+---
+
+> 小小笔记啦
+
+## js & 计时器 (timer)  
+timer，js初学者必备技能。工作了一年多才在这里码下笔记，也是够懒。  
+
+## 正题  
+js的timer应用广范 一般用于  
+1. *用户注册发送手机验证码xx秒后重发*
+1. *系统将于xx秒后爆炸*
+1. *将在xx秒后返回上一页*
+1. *等等...等*
+
+## 举个 🌰 (1)  
+直接上图  
+![演示图](/img/in-post/20190225/js-timer-1.jpg)
+上代码 这里应用了`setInterval`方法  
+```
+<!-- 
+	author: Polo
+	data: 2019-02-25
+	title: js timer
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="description" content="polo hab | js timer">
+	<meta name="keywords" content="polohab, polo hab, polo-huang, polo_huang, polo, huang, js, timer">
+	<title>Js timer</title>
+</head>
+<style type="text/css">
+	.hide {
+		display: none;
+	}
+</style>
+<body>
+	<div style="margin: 50px 15%; text-align: center;">
+		<p style="text-align: center;">输入手机</p>
+		<input type="text" name="phone">
+		<button id="send-code-btn" data-disabled="false">
+			<span class="label">发送验证码</span>
+			<span class="timer hide"></span>
+		</button>
+	</div>
+</body>
+<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+<script type="text/javascript">
+	const duration = 60;
+
+	let sendCodeBtn = $('#send-code-btn');
+	let btnTimer = duration;
+	function activeBtn(btn) {
+		btn.attr('disabled', false);
+		btn.find('.label').removeClass('hide');
+		btn.find('.timer').addClass('hide');
+		btnTimer = duration;
+	}
+	sendCodeBtn.click(function() {
+		$(this).attr('disabled', true);
+		$(this).find('.label').addClass('hide');
+		$(this).find('.timer').removeClass('hide');
+		sendCodeBtn.find('.timer').text(btnTimer);
+
+		let timer = setInterval(()=>{
+			console.log(btnTimer);
+			btnTimer--;
+			sendCodeBtn.find('.timer').text(btnTimer);
+			if (btnTimer == 0) {
+				clearInterval(timer);
+				activeBtn(sendCodeBtn);
+			}
+	  }, 1000);
+	});
+</script>
+</html>
+```
+
+## 再举个 🌰 (2)
+🙄🙄️ `setTimeout`
+![演示图](/img/in-post/20190225/js-timer-2.jpg)
+```
+<!-- 
+	author: Polo
+	data: 2019-02-25
+	title: js timer
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="description" content="polo hab | js timer">
+	<meta name="keywords" content="polohab, polo hab, polo-huang, polo_huang, polo, huang, js, timer">
+	<title>Js timer</title>
+</head>
+<style type="text/css">
+	.hide {
+		display: none;
+	}
+</style>
+<body>
+	<div style="margin: 50px 15%; text-align: center;">
+		<p style="text-align: center;">三秒后原地爆炸？</p>
+	</div>
+</body>
+<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+<script type="text/javascript">
+	const duration = 3000;
+
+	$(document).ready(function() {
+		setTimeout("alert('Bang!!')", duration);
+	});
+</script>
+</html>
+```

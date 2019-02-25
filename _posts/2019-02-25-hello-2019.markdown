@@ -1,0 +1,26 @@
+---
+layout:     post
+title:      "Hello 2019"
+subtitle:   " \"Hello World, Hello Hab, Hello 2019\""
+date:       2019-02-25 14:00:00
+author:     "Polo"
+header-img: "img/post-bg-2015.jpg"
+catalog: true
+tags:
+    - 生活
+    - Hab
+---
+
+> Start Here
+
+## 前言  
+ 2017年8月开始实习，到现在一年半的时间。我做了什么？我获得了什么？
+2019年，先祝自己猪年大吉吧。
+
+## 正文  
+除去生活琐碎，我做的事情并不多。  
+倒也是适应了生活，适应了工作。  
+这就意味着重复、停滞，不再向前。这样看来应该得让自己继续适应新的环境。  
+
+## 后记  
+一个作文痴，跟风码字。始于*2019-2-25*

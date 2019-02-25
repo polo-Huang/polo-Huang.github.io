@@ -78,7 +78,7 @@ netease_comment: false
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "A football player, cartoonist, <br>cook who was delayed by the codeing..."
+sidebar-about-description: "被敲代码耽误的足球运动员、厨师、画家"
 sidebar-avatar: /img/avatar-polo-ny.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 

@@ -9,7 +9,6 @@ catalog: true
 tags:
   - js
   - web
-  - test
 ---
 
 > 备用

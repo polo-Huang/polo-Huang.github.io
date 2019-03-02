@@ -7,14 +7,15 @@ author:     "Polo"
 header-img: "img/post-bg-2015.jpg"
 catalog: true
 tags:
-  - js
-  - web
+    - program
+    - js
+    - web
 ---
 
-> 备用
+> js
 
 ## js & 计时器 (timer)  
-timer，js初学者必备技能。工作了一年多才在这里码下笔记，也是够懒。  
+timer，js初学者必备技能。
 
 ## 正题  
 js的timer应用广范 一般用于  
@@ -24,9 +25,8 @@ js的timer应用广范 一般用于
 1. *等等...等*
 
 ## 举个 🌰 (1)  
-直接上图  
 ![演示图](/img/in-post/20190225/js-timer-1.jpg)
-上代码 这里应用了`setInterval`方法  
+应用`setInterval`方法  
 ```
 <!-- 
 	author: Polo

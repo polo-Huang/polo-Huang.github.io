@@ -181,4 +181,10 @@ router.get('/getList', function(req, res, next) {
 
 
 ## 源码  
-👉[源代码](https://github.com/polo-Huang/nodeJs-express-mysql-mvc)，欢迎提出问题与建议。🙏点击`star` 请多指教!
+<p>欢迎提出问题与建议。👉源代码
+🙏点击<code class="highlighter-rouge">star</code>请多指教!
+<iframe
+    style="margin-left: 2px; margin-bottom:-5px;"
+    frameborder="0" scrolling="0" width="100px" height="20px"
+    src="https://ghbtns.com/github-btn.html?user=polo-Huang&repo=nodeJs-express-mysql-mvc&type=star&count=true">
+</iframe></p>

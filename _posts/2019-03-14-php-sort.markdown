@@ -1,0 +1,163 @@
+---
+layout:     post
+title:      "PHP的四种排序"
+subtitle:   "\"PHP中常见的四种排序，通过计时进行实际运算比较\""
+date:       2019-03-14 11:40:00
+author:     "Polo"
+header-img: "img/post-bg-2015.jpg"
+catalog: true
+tags:
+    - 程序
+    - php
+    - 算法
+---
+
+> 排序  
+
+## 感慨
+`排序`，入门算法。可是当我需要使用到时却不能脱离百度完全自己写出来。  
+随着框架的发展和平凡的使用，一些基础的算法反而无法再流畅的表达出来。
+
+## 四种算法
+1. 冒泡排序 遍历所有情况，最简单也是效率最低的
+1. 插入排序
+1. 选择排序
+1. 快速排序
+
+## 通过计算用时进行实际比较
+
+    <?php
+
+    date_default_timezone_set('Asia/Shanghai');
+
+    echo "PHP排序测试\n";
+
+    // 定义数组
+    $arr = [253,170,9,2,5,13,8,23,345,234,74,10,3,653,64];
+
+    // 冒泡排序
+    function arraySort($arr) {
+        $len = count($arr);
+        for ($i = 1; $i < $len; $i++) {
+            for ($j = 0; $j < $len - 1; $j++) {
+                if ($arr[$j] > $arr[$j + 1]) {
+                    $sum = $arr[$j];
+                    $arr[$j] = $arr[$j + 1];
+                    $arr[$j + 1] = $sum;
+                }
+            }
+        } return $arr;
+    }
+    // 冒泡排序加强版
+    function arraySortPro($arr) {
+        $len = count($arr);
+        for ($i = 1; $i < $len; $i++) {
+            $flag = 0;
+            for ($j = 0; $j < $len - 1; $j++) {
+                if ($arr[$j] > $arr[$j + 1]) {
+                    $sum = $arr[$j];
+                    $arr[$j] = $arr[$j + 1];
+                    $arr[$j + 1] = $sum;
+                    $flag = 1;
+                }
+            } if (!$flag) break;
+            
+        } return $arr;
+    }
+    // 插入排序
+    function insertSort($arr)
+    {
+        $n = count($arr);
+        for($i = 1; $i < $n; $i++) { // 从数组的第二个元素开始，取出该数
+            for($j = $i; $j > 0; $j--) { // 依次对前面的数就行比较进行调换，插入合适的位置
+                if($arr[$j] > $arr[$j - 1]) { // 比前面的小则排到前面，决定升序
+                    $tmp = $arr[$j];
+                    $arr[$j] = $arr[$j - 1];
+                    $arr[$j - 1] = $tmp;
+                } else { // 大于或等于前面的数，表示已找到插入的位置
+                    break;
+                }
+            }
+        } return $arr;
+    }
+    // 选择排序
+    function selectSort($arr)
+    {
+        $n = count($arr);
+        for($i = $n - 1; $i > 0; $i--) { // 从最后一个开始依次往前
+            $pos = $i; // 假设最大元素的位置
+            for($j = 0; $j < $i; $j++) { // 获取从$i以前所有数中最大的数
+                if($arr[$j] > $arr[$pos]) { // 所在位置元素比目前最大元素大，获取其位置
+                    $pos = $j;
+                }
+            }
+            if($pos != $i) { // 将最大元素放入指定的位置
+                $tmp = $arr[$pos];
+                $arr[$pos] = $arr[$i];
+                $arr[$i] = $tmp;
+            }
+        } return $arr;
+    }
+    // 快速排序
+    function quickSort($arr)
+    {
+        $n = count($arr);
+        if($n <= 1) { // 数组只有一个元素时直接返回
+            return $arr;
+        }
+        $largeArr = array(); // 存放大数
+        $smallArr = array(); // 存放小数
+        $cur = $arr[0];  // 设定第一个数位中间数
+        for($i = 1; $i < $n; $i++) { // 遍历数组元素，对每个元素进行归类
+            if($arr[$i] > $cur) {
+                $largeArr[] = $arr[$i];
+            } else {
+                $smallArr[] = $arr[$i];
+            }
+        }
+        // 递归对大数组和小数组进行相同的处理
+        $smallArr = quickSort($smallArr);
+        $largeArr = quickSort($largeArr);
+        // 合并小数组、中间数和大数组
+        return array_merge($smallArr, array($cur), $largeArr);
+    }
+
+    // 计算用时
+    function printDuration ($startTime, $endTime, $message) {
+        $startTime = (float)substr(strstr($startTime, ' ', true), 2);
+        $endTime = (float)substr(strstr($endTime, ' ', true), 2);
+        var_dump($message.($endTime - $startTime));
+    }
+
+    $startTime = microtime();
+    $newArr = arraySort($arr);
+    $endTime = microtime();
+    printDuration($startTime, $endTime, '冒泡排序:');
+
+    $startTime = microtime();
+    $newArr = arraySortPro($arr);
+    $endTime = microtime();
+    printDuration($startTime, $endTime, '冒泡排序Pro:');
+
+    $startTime = microtime();
+    $newArr = insertSort($arr);
+    $endTime = microtime();
+    printDuration($startTime, $endTime, '插入排序:');
+
+    $startTime = microtime();
+    $newArr = selectSort($arr);
+    $endTime = microtime();
+    printDuration($startTime, $endTime, '选择排序:');
+
+    $startTime = microtime();
+    $newArr = quickSort($arr);
+    $endTime = microtime();
+    printDuration($startTime, $endTime, '快速排序:');
+
+    // 验证排序是否成功
+    // var_dump($arr, $newArr);
+
+## 在线工具  
+安利一波[在线工具](https://tool.lu/coderunner/)  
+将以上代码拷贝到在线工具就可以运行查看各种排序的用时了  
+通过以上的数组，测试出来的结果是`插入排序`的用时最短  

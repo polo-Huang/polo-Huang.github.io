@@ -1,0 +1,37 @@
+---
+layout:     post
+title:      "LUA 小记"
+subtitle:   "\"lua语法内置函数啥啥的\""
+date:       2019-12-24 18:00:00
+author:     "Polo"
+header-img: "img/post-bg-2015.jpg"
+catalog: true
+tags:
+    - 语法
+    - lua
+    - 函数
+---  
+
+> 小记 
+
+## 内置函数  
+通过`table.sort`方法实现根据table中的某个属性排序
+```
+    local t = {
+        {time = 2, i = 1},
+        {time = 5, i = 2},
+        {time = 0, i = 2},
+        {time = 3, i = 4},
+        {time = 1, i = 5},
+        {time = 4, i = 2},
+    }
+    table.sort(t, function(t1, t2) return t1.time > t2.time end)
+    print("t = {")
+    for i, v in ipairs(t) do
+        print(string.format("\t[%d] = {time = %d, i = %d}", i, v.time, v.i))
+    end
+    print("}")
+```
+
+
+# 语法  

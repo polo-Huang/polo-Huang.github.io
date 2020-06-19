@@ -19,15 +19,15 @@ tags:
 例如：
 有一个复合索引为`(col1,col2,col3)`
 那么  
-1.单独查询`col1=xxx`
-1.查询`col1=xxx and col2=xxx`
-1.查询`col1=xxx and col2=xxx and col3=xxx`
+1. 单独查询`col1=xxx`  
+1. 查询`col1=xxx and col2=xxx`  
+1. 查询`col1=xxx and col2=xxx and col3=xxx`  
 
 都能使用到改复合索引  
 但是
-1.单独查询`col2=xxx`
-1.单独查询`col3=xxx`
-1.单独查询`col2=xxx and col3=xxx`
+1. 单独查询`col2=xxx`  
+1. 单独查询`col3=xxx`  
+1. 单独查询`col2=xxx and col3=xxx`  
 
 改复合索引都不起作用  
 因此复合索引的顺序也很关键  

@@ -27,7 +27,7 @@ tags:
 但是
 1. 单独查询`col2=xxx`  
 1. 单独查询`col3=xxx`  
-1. 单独查询`col2=xxx and col3=xxx`  
+1. 查询`col2=xxx and col3=xxx`  
 
 改复合索引都不起作用  
 因此复合索引的顺序也很关键  

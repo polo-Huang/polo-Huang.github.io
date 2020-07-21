@@ -96,7 +96,7 @@ drwxr-xr-x 2 root root 4096 10月  3 2019 default.d
 以上输出就是目录下的原始文件  
 首先 `nginx.conf` 就是配置文件的入口文件  
 我们可以使用 `cat` 命令查看文件内容  
-可以深入研究一下[nginx配置详解](https://www.runoob.com/w3cnote/nginx-setup-intro.html)  
+可以深入研究一下[nginx配置详解](https://www.runoob.com/w3cnote/nginx-setup-intro.html)，或者了解以下[nginx小记](/2020/07/16/nginx-notes/)  
   
 下面我们可以做一些简单的配置  
 *在不熟悉的情况下建议先将`nginx.conf`备份一份修改文件名为`nginx.conf.bak`进行备份，如果后面不知道自己不小心修改到了那些配置导致无法运行等问题时可以直接替换为默认配置*  

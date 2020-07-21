@@ -1,0 +1,291 @@
+---
+layout:     post
+title:      "PHP Api 项目原生代码搭建"
+subtitle:   "\"原生PHP项目搭建\""
+date:       2020-07-16 9:49:00
+author:     "Polo"
+header-img: "img/post-bg-2015.jpg"
+catalog: true
+tags:
+    - PHP
+    - api
+    - 原生
+---  
+
+> 小记 
+
+## 原生PHP项目  
+日常开发中常用成熟稳定的框架进行项目开发，而回归原生是为了  
++ 更加深入理解PHP的基础知识，提升对PHP这门语言的理解能力让基础知识更加扎实也是为了之后学习更多框架时可以更加快速的上手。  
++ 在开发一些业务简单层级清晰的项目时可以减少多余代码时项目结构更加简洁容易维护  
+下面让我们一起学习如何使用原生PHP搭建一套完整的Api项目，可参考[PHP环境搭建](/2020/07/10/centos-nginx-php-mysql/)以便阅读以下内容  
+
+## 搭建Api项目目录结构  
+通过[PHP环境搭建](/2020/07/10/centos-nginx-php-mysql/)搭建的基础目录进行拓展  
+
++ configs `配置文件目录`
+   + code.php `状态码`
+   + config.php `基础配置`
+   + roles.php `权限`
+   + routes.php `路由`
++ control `业务逻辑控制器目录`
+   + ctl_index.php `主控制器`
+   + ctl_user.php `用户相关`
++ core `核心文件目录`
+   + db.php `数据库类`
+   + init.php `初始化文件`
+   + log.php `日志调试`
+   + roles.php `权限控制`
+   + utils.php `公用函数`
++ index.php `入口文件: 转发请求`
+
+## 路由封装分发请求  
+根据[`MVC`](https://baike.baidu.com/item/MVC%E6%A1%86%E6%9E%B6/9241230?fromtitle=mvc&fromid=85990&fr=aladdin)的设计理念，我们把业务逻辑这一层独立出来将请求中的url信息进行解析转发到`control`目录下的指定类中指定的方法，这样便于我们的开发和后期的维护  
+#### 路由分发  
+首先我们需要配置`nginx.conf`使得请求在没有命中文件时转发到根目录下的`index.php`入口文件  
+
+```
+server {
+    ...
+    root         /data/html;
+    ...
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$  {
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+
+        fastcgi_param SCRIPT_FILENAME           $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+
+    ...
+}
+```
+
+在`location /`里添加`try_files $uri $uri/ /index.php?$query_string;`，语法解释可参考[Nginx 小记](/2020/07/16/nginx-notes/#路由)  
+下面以`/user/info/?id=1`为例，这是根据用户id获取用户信息的接口请求url，我们需要将这条url指向到`/control/ctl_user.php`中的`info`方法  
+
+```
+<?php
+require './core/init.php';
+into_controller();
+```
+
+`index.php`的内容很简单，引入`init.php`文件，并执行`into_controller`方法  
+
+```
+function into_controller()
+{
+    // 获取路由信息
+    $routes = explode("/", $_SERVER['REQUEST_URI']);
+    try {
+        // 获取控制器信息
+        $ctl = preg_replace("/[^0-9a-z_]/i", "", isset($routes[1]) ? $routes[1] : "");
+        $ctl = "ctl_".($ctl == "" ? $ctl = 'index' : $ctl);
+        // 获取方法名
+        $func = preg_replace("/[^0-9a-z_]/i", "", isset($routes[2]) ? $routes[2] : "");
+        $func = $func == "" ? $func = 'index' : $func;
+        // 拼接出控制器文件完整信息
+        $path_file = PATH_CONTROL.'/'.$ctl.'.php';
+
+        // 判断控制器文件是否存在，否throw错误信息
+        if (file_exists($path_file)) {
+            // 引入控制器文件
+            require $path_file;
+        } else {
+            throw new Exception("Contrl {$ctl}--{$path_file} is not exists!");
+        }
+        // 判断控制器文件中声明的类与方法是否存在
+        if (method_exists($ctl, $func) === true) {
+            // 权限控制
+            roles::auth($ctl, $func);
+            // 调用类与方法
+            $instance = new $ctl();
+            $instance->$func();
+        } else {
+            // throw new Exception("Method {$ctl}::{$func}() is not exists!");
+            log::error("init.php run_controller() error: Method {$ctl}::{$func}() is not exists! url: {$_SERVER['REQUEST_URI']}");
+            utils::abort(404);
+        }
+    } catch (Exception $e) {
+        // 捕获到错误时打印日志
+        log::error("init.php run_controller() error: {$e->getMessage()} url: {$_SERVER['REQUEST_URI']}");
+        // 中止程序并向客户端返回状态码
+        utils::abort(500);
+    }
+}
+```  
+以上代码涉及到[打印日志](#调试日志)与[中止程序](#中止程序)，详细如下文  
+#### 权限控制  
+进入到指定的方法之前会先调用`roles::auth`方法，我们可以在这里进行权限的统一控制  
+`/core/roles.php`
+这里通过在`into_controller`方法中获取到的`ctl`控制器信息与`func`方法名查找路由配置中是否设置了对应的权限类型，根据权限类型进行对应的业务逻辑判断，只要有一条权限不满足要求则返回403状态码
+
+```
+<?php
+if( !defined('CORE') ) exit('Request Error!');
+/**
+ * 权限控制类
+ */
+class roles
+{
+    public static function auth($ctl, $func)
+    {
+        $routes = $GLOBALS['config']['routes'];
+        // 先判断控制器层是否有权限控制
+        if (isset($routes['ctl'][$ctl])) {
+            self::roleVerify($routes['ctl'][$ctl]);
+        }
+        // 再判断具体方法
+        $func_uri = "{$ctl}/{$func}";
+        if (isset($routes['func'][$func_uri])) {
+            self::roleVerify($routes['func'][$func_uri]);
+        }
+    }
+
+    /**
+     * 权限控制
+     */
+    private static function roleVerify($roles)
+    {
+        $forbidden = true;
+        foreach ($roles as $role) {
+            switch ($role) {
+                case 'login':
+                    // 判断是否有登录权限
+                    if (0) {
+                        $forbidden = false;
+                    }
+                    break;
+            }
+            // 只要有一条权限不足直接跳出循环
+            if ($forbidden) break;
+        }
+        if ($forbidden) {
+            utils::abort(403);
+        }
+    }
+    /**
+     * End
+     */
+}
+
+
+```
+
+`/configs/routes.php`
+
+```
+<?php
+/**
+ * 路由权限控制
+ */
+
+$GLOBALS['config']['routes'] = [
+    'ctl' => [
+        'ctl_user' => ['login'],
+    ],
+    'func' => [
+        'ctl_index/index' => ['login']
+    ]
+];
+```
+
+## 接口鉴权  
+
+## 统一请求与响应规范  
+在`core`目录下创建一个`utils.php`文件作为提供公用函数的类，在`utils`类中创建统一请求与响应标准的方法   
+#### 响应格式  
+因为该项目模板为`Api`所以响应格式为`application/json`,在后面`中止程序`命令中也统一返回`json`字符串。 
+
+```
+<?php
+if (!defined('CORE')) exit('Request Error!');
+/**
+ * 公用类
+ */
+class utils
+{
+    /**
+     * HTTP类函数
+     */
+    // 判断状态码
+    public static function get_state_hs($code)
+    {
+        $hs = ceil(intval($code) / 100);
+        return $hs;
+    }
+
+    public static function response($code, $data, $fails_code = 0)
+    {
+        $response = [
+            'code' => $code,
+            'data' => $data
+        ];
+
+        // 错误时返回错误信息
+        if (self::get_state_hs($code) != HS_SUCCESS) {
+            $response['fails_code'] = $fails_code;
+        }
+
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($response);
+        die();
+    }
+    
+    ...
+}
+```
+
+#### 状态码
+在响应的`json`数据中`code`值代表请求的状态码  
+
+状态码|描述
+--|:--:
+200|更新/获取资源成功
+403|无权限调用接口
+404|资源不存在
+500|服务器发生错误
+
+#### 错误码  
+在状态码的基础上定义错误码，当状态码不等于200~299时，响应数据中增加错误码的返回，如`3000`用户名或密码错误等。  
+
+<!-- ## Model层封装   -->
+
+## 其他  
+#### 调试日志  
+上面用到的`log::error`使用的是[`error_log`]()函数，这里将函数封装起来是可以方便后续给调试日志添加逻辑
+
+```
+<?php
+if( !defined('CORE') ) exit('Request Error!');
+/**
+ * 调试日志类
+ */
+class log
+{
+    // 
+    public static function error($message)
+    {
+        error_log($message, 0);
+    }
+}
+```
+
+#### 中止程序  
+在`utils`类中封装中止程序方便在一些业务逻辑中直接向客户端输错状态码
+
+```
+...
+    public static function abort($code)
+    {
+        self::response($code, []);
+    }
+...
+```
+

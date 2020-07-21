@@ -1,25 +1,27 @@
-> 从枯燥无味的程序中找到彩蛋   
-> 程序员的定义？
+> 梦想太多会变成兴趣  
+> 兴趣太多费钱  
 
-你好，我是polo，软件工程师。熟悉`PHP`(`laravel`、`thinkPHP`等框架)，web前端(`html`+`css`+`javascript`)，数据库(`mysql`)，服务器运营(`linux`)。日常入坑 `cocos`、`nodeJs`、`vue`...  
+polo, 软件工程师。
 
-##### 不良症状
+##### 兴趣
 
-*代码洁癖、惰性开发，喜欢寻找快捷方便的算法。*
+*足球、游戏、漫画、桌游、滑冰、桌球、羽毛球*
+*滑雪、网球、棒球、橄榄球、篮球、游泳、滑板、吉他、划船、射箭、收藏、rc赛车、手工...*
 
 
-##### 项目经历
+##### 项目
 
-- [heshelearn][1] 在线教育平台 - 在线多人聊天
-- `ind-home` 室内设计平台
-- [globalwinningteam][2] 销售培训系统
-- `wedding` 婚礼共享照片App - API开发
-- [malaycn][3] 大马论坛
-- [Polo Hab][4] 我的手账
-- [小小实验库][5] 
+- [闪电助手][1] ios 手机助手 - 精选应用与游戏 “免费下载”
+- [heshelearn][2] 在线教育平台 - 在线多人直播授课  
+- `ind-home` 室内设计平台  
+- `globalwinningteam` 销售培训系统  
+- `wedding` 婚礼共享照片App - API开发  
+- `malaycn` 大马论坛  
+- [Polo Hab][4] 我的手账  
+- [小小实验库][5]  
 
-[1]: //dev.heshelearn.com/
-[2]: //globalwinningteam.com/zh
+[1]: //m.sdios.com/
+[2]: //www.heshelearn.com/
 [3]: //bbs.malaycn.com/
 [4]: //polo-huang.github.io/
-[5]: //wb-tseekauto.com/
+[5]: //47.107.183.229/test/index.html

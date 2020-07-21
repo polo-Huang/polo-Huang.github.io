@@ -3,7 +3,7 @@ title: Polo Hab
 SEOTitle: polo的手账本 | Polo Hab
 header-img: img/home-bg.jpg
 email: polo_07@163.com
-description: "关于程序与设计、厨师与画家 | polo，Web & Game Lover，Software Engineer，Game Designer | 这里是 @PoloHuang 的个人博客，与你分享这个世界。"
+description: "软件 | polo，Web & Game Lover，Software Engineer，Game Designer | 这里是 @PoloHuang 的个人博客，与你分享这个世界。"
 keyword: "Polo, PoloHuang, polo-huang, polo_huang, phpro, @polo-Huang, polo的手账本, Polo Huang, 博客, 个人网站, 互联网, php, Web, JavaScript, js, 游戏, 摄影, 旅游, 运动"
 url: "https://polo-huang.github.io"              # your host, for absolute URL
 baseurl: ""                             # for example, '/blog' if your blog hosted on 'host/blog'
@@ -78,7 +78,7 @@ netease_comment: false
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "被敲代码耽误的足球运动员、厨师、画家"
+sidebar-about-description: ""
 sidebar-avatar: /img/avatar-polo-ny.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 

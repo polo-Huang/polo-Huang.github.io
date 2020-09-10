@@ -50,7 +50,7 @@ nginx version: nginx/1.16.1
 最简单的方式就是，可以在nginx访问目录下创建一个文件，通过 http://`ip`/`文件名` 的方式直接访问到文件。  
   
 **举个栗子**  
-先进入nginx访问目录 在Ubuntu下的默认路径是 `/usr/share/nginx/html`  
+先进入nginx访问目录 在Centos下的默认路径是 `/usr/share/nginx/html`  
 创建一个测试用的`html`文件按`i`输入任意文本按`Esc`进入命令模式再输入`:wq`保存并退出  
 以下使用[`vim`](https://www.cnblogs.com/greatLong/p/12188185.html)编辑文件  
   
